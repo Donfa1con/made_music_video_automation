@@ -1,0 +1,67 @@
+version: '3.6'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.8.9-alpine
+    command: rabbitmq-server
+    restart: on-failure
+
+  tgbot:
+    restart: on-failure
+    build:
+      context: ./src/tgbot/
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./src/common:/code/common:ro
+      - ./${USER_DATA}:${USER_DATA}
+
+  quality:
+    restart: on-failure
+    build:
+      context: ./src/quality/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./src/common:/code/common:ro
+      - ./${USER_DATA}:${USER_DATA}
+
+  highlights:
+    restart: on-failure
+    build:
+      context: ./src/highlights/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./src/common:/code/common:ro
+      - ./src/models/highlights:/code/models:ro
+      - ./${USER_DATA}:${USER_DATA}
+
+  music_recommendation:
+    restart: on-failure
+    build:
+      context: ./src/music_recommendation/
+      dockerfile: ./Dockerfile
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./src/common:/code/common:ro
+      - ./${USER_DATA}:${USER_DATA}
+
+  video_audio_compose:
+    restart: on-failure
+    build:
+      context: ./src/video_audio_compose/
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - ./src/common:/code/common:ro
+      - ./${USER_DATA}:${USER_DATA}
