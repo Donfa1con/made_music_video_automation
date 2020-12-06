@@ -26,7 +26,7 @@ def callback(message):
 
     message.update({'video_audio_compose': {'time': time.time() - start_time}})
 
-    audio_path = '/user_data/Bill_Conti_Gonna_Fly_Now.mp3'
+    audio_path = 'http://f.find-music.net/music/_Rokki%201%20(Rocky)/Bill%20Conti%20-%20Gonna%20Fly%20Now%20(Theme%20from%20Rocky).mp3'
     highlight_path = add_audio(message['highlights']['highlight_path'], audio_path)
 
     send_video(highlight_path, message['tgbot']['user_id'])
