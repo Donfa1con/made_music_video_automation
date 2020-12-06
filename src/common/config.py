@@ -20,3 +20,12 @@ RABBIT_CONFIG = {
     },
     'heartbeat': 0,
 }
+
+RESULT_VIDEO_PARAMS = {
+    'size': (1280, 720),  # w, h
+    'fps': 30.0,
+    'format': {
+        'fourcc': 'mp4v',
+        'ext': 'mp4'
+    }
+}

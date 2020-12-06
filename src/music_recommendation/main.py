@@ -20,5 +20,5 @@ if __name__ == '__main__':
             worker = RabbitMQWorker(callback, **RABBIT_CONFIG['music_recommendation'])
             worker.listen_queue()
         except Exception as e:
-            print(e)
+            print(e, flush=True)
         time.sleep(10)
