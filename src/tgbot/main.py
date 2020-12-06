@@ -1,7 +1,6 @@
 import glob
 import os
 import time
-import uuid
 
 import telebot
 
@@ -28,11 +27,11 @@ def init_new_folder(user_id):
     os.makedirs(os.path.join(new_folder_name, 'images'))
 
 
-def get_last_folder_by_ext(path):
+def get_folder_by_ext(path):
     ext = os.path.splitext(os.path.basename(path))[1]
-    if ext is ['.mp4']:
+    if ext in ['.mp4']:
         return 'videos'
-    if ext == ['jpeg', 'jpg']:
+    if ext in ['.jpeg', '.jpg']:
         return 'images'
 
 
@@ -77,12 +76,12 @@ def callback_inline_photo(message):
     file_info = BOT.get_file(file_id)
     print('file.file_path =', file_info.file_path, flush=True)
 
-    last_created_folder = get_last_folder_by_id(user_id)
-    downloaded_file = BOT.download_file(file_info.file_path)
-
     if folder is None:
-        folder = get_last_folder_by_ext(file_info.file_path)
+        folder = get_folder_by_ext(file_info.file_path)
+
     if folder:
+        last_created_folder = get_last_folder_by_id(user_id)
+        downloaded_file = BOT.download_file(file_info.file_path)
         with open(os.path.join(last_created_folder, folder, os.path.basename(file_info.file_path)), 'wb') as file:
             file.write(downloaded_file)
 
