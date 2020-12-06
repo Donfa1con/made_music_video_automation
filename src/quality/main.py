@@ -7,6 +7,7 @@ import cv2
 
 from common.config import RABBIT_CONFIG
 from common.rabbit_worker import RabbitMQWorker
+from common.telegram import send_message
 
 
 def callback(message):
@@ -15,6 +16,7 @@ def callback(message):
     """
     print(message, flush=True)
     start_time = time.time()
+    send_message("Stage 1/4", message['tgbot']['user_id'])
 
     message['quality'] = {'results': collections.defaultdict(list)}
 

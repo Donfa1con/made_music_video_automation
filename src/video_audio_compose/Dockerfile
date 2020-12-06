@@ -2,7 +2,7 @@ FROM openvino/ubuntu18_runtime:2021.1
 USER root
 RUN rm -r /opt/intel/openvino/opencv/ && \
     rm /opt/intel/openvino/python/python3/cv2.abi3.so && \
-    apt update && apt-get install libgl1-mesa-dev -y
+    apt update && apt-get install libgl1-mesa-dev ffmpeg -y
 
 WORKDIR /code
 

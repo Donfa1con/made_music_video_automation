@@ -4,7 +4,7 @@ import time
 
 import telebot
 
-from common.config import RABBIT_CONFIG
+from common.config import RABBIT_CONFIG, VIDEO_FORMATS, IMAGE_FORMATS
 from common.rabbit_worker import RabbitMQWorker
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
@@ -17,7 +17,7 @@ def get_last_folder_by_id(user_id):
     user_data_path = os.path.join(os.environ.get('USER_DATA'), user_id)
     all_folders = glob.glob(f'{user_data_path}/*')
     if all_folders:
-        return max(all_folders, key=os.path.getmtime)
+        return max(all_folders, key=lambda x: int(x.split('/')[-1]))
 
 
 def init_new_folder(user_id):
@@ -29,9 +29,9 @@ def init_new_folder(user_id):
 
 def get_folder_by_ext(path):
     ext = os.path.splitext(os.path.basename(path))[1]
-    if ext in ['.mp4']:
+    if ext in VIDEO_FORMATS:
         return 'videos'
-    if ext in ['.jpeg', '.jpg']:
+    if ext in IMAGE_FORMATS:
         return 'images'
 
 

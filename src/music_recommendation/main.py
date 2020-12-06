@@ -2,7 +2,7 @@ import time
 
 from common.config import RABBIT_CONFIG
 from common.rabbit_worker import RabbitMQWorker
-
+from common.telegram import send_message
 
 def callback(message):
     """Queue callback
@@ -10,6 +10,7 @@ def callback(message):
     """
     print(message, flush=True)
     start_time = time.time()
+    send_message('Stage 3/4', message['tgbot']['user_id'])
     message.update({'music_recommendation': {'time': time.time() - start_time}})
     return message
 

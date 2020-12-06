@@ -8,6 +8,7 @@ import cv2
 from common.config import RABBIT_CONFIG, RESULT_VIDEO_PARAMS
 from common.rabbit_worker import RabbitMQWorker
 import utils
+from common.telegram import send_message
 
 
 def create_writer(message):
@@ -25,6 +26,7 @@ def callback(message):
     """
     print(message, flush=True)
     start_time = time.time()
+    send_message("Stage 2/4", message['tgbot']['user_id'])
     # Заглушка
     writer, highlight_path = create_writer(message)
 
