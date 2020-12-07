@@ -6,7 +6,7 @@ import cv2
 
 from common.config import RABBIT_CONFIG, RESULT_VIDEO_PARAMS
 from common.rabbit_worker import RabbitMQWorker
-from common.telegram import send_message
+from common.telegram import send_message, send_video
 from common.utils import create_writer, resize_image_with_ratio
 
 
@@ -18,6 +18,7 @@ def callback(message):
     start_time = time.time()
     send_message("Stage 2/4", message['tgbot']['user_id'])
     # Заглушка
+    bad_writer, bad_frames_path = create_writer(message["tgbot"]["data_path"], 'bad_frames')
     writer, highlight_path = create_writer(message["tgbot"]["data_path"], 'highlights')
 
     images_paths = glob.glob(f'{message["tgbot"]["data_path"]}/images/*')
@@ -43,13 +44,24 @@ def callback(message):
                     success, frame = cap.read()
                     if not success:
                         break
+                    resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
                     if frame_cnt in good_frames:
-                        resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
                         writer.write(resized_frame)
+                    else:
+                        bad_writer.write(resized_frame)
                     frame_cnt += 1
                 cap.release()
+        else:
+            if file_path in images_paths:
+                image = cv2.imread(file_path)
+                image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                for _ in range(int(RESULT_VIDEO_PARAMS['fps'] // 3)):
+                    bad_writer.write(image)
+
     writer.release()
-    # Заглушка
+    bad_writer.release()
+
+    send_video(bad_frames_path, message['tgbot']['user_id'])
     message.update({'highlights': {'time': time.time() - start_time,
                                    'highlight_path': highlight_path}})
     send_message(f'Stage 2/4, time: {message["highlights"]["time"]}', message['tgbot']['user_id'])
