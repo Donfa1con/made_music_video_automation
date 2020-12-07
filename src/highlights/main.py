@@ -1,23 +1,13 @@
 import glob
-import os
-import time
 import random
+import time
 
 import cv2
 
 from common.config import RABBIT_CONFIG, RESULT_VIDEO_PARAMS
 from common.rabbit_worker import RabbitMQWorker
-import utils
 from common.telegram import send_message
-
-
-def create_writer(message):
-    highlight_path = os.path.join(message["tgbot"]["data_path"], f'test.{RESULT_VIDEO_PARAMS["format"]["ext"]}')
-    writer = cv2.VideoWriter(highlight_path,
-                             cv2.VideoWriter_fourcc(*RESULT_VIDEO_PARAMS['format']['fourcc']),
-                             RESULT_VIDEO_PARAMS['fps'],
-                             RESULT_VIDEO_PARAMS['size'])
-    return writer, highlight_path
+from common.utils import create_writer, resize_image_with_ratio
 
 
 def callback(message):
@@ -28,7 +18,7 @@ def callback(message):
     start_time = time.time()
     send_message("Stage 2/4", message['tgbot']['user_id'])
     # Заглушка
-    writer, highlight_path = create_writer(message)
+    writer, highlight_path = create_writer(message["tgbot"]["data_path"], 'highlights')
 
     images_paths = glob.glob(f'{message["tgbot"]["data_path"]}/images/*')
     videos_paths = glob.glob(f'{message["tgbot"]["data_path"]}/videos/*')
@@ -41,7 +31,7 @@ def callback(message):
         if file_path in message['quality']['results']:
             if file_path in images_paths:
                 image = cv2.imread(file_path)
-                image = utils.resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
                 for _ in range(int(RESULT_VIDEO_PARAMS['fps'])):
                     writer.write(image)
 
@@ -54,7 +44,7 @@ def callback(message):
                     if not success:
                         break
                     if frame_cnt in good_frames:
-                        resized_frame = utils.resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
+                        resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
                         writer.write(resized_frame)
                     frame_cnt += 1
                 cap.release()
@@ -62,6 +52,7 @@ def callback(message):
     # Заглушка
     message.update({'highlights': {'time': time.time() - start_time,
                                    'highlight_path': highlight_path}})
+    send_message(f'Stage 2/4, time: {message["highlights"]["time"]}', message['tgbot']['user_id'])
     return message
 
 

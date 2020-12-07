@@ -1,5 +1,18 @@
+import os
+
 import cv2
 import numpy as np
+
+from .config import RESULT_VIDEO_PARAMS
+
+
+def create_writer(data_path, name):
+    video_path = os.path.join(data_path, f'{name}.{RESULT_VIDEO_PARAMS["format"]["ext"]}')
+    writer = cv2.VideoWriter(video_path,
+                             cv2.VideoWriter_fourcc(*RESULT_VIDEO_PARAMS['format']['fourcc']),
+                             RESULT_VIDEO_PARAMS['fps'],
+                             RESULT_VIDEO_PARAMS['size'])
+    return writer, video_path
 
 
 def resize_image_with_ratio(image, w, h):

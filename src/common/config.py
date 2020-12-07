@@ -37,3 +37,5 @@ VIDEO_FORMATS = {'.webm', '.mkv', '.flv', '.vob', '.ogv', '.ogg', '.drc', '.gif'
                  '.roq', '.nsv', '.f4v', '.f4p', '.f4a', '.f4b'}
 
 IMAGE_FORMATS = {'.jpeg', 'jpg', '.png', '.webp'}
+
+QUALITY_THRESHOLD = 40

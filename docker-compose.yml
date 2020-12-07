@@ -30,6 +30,7 @@ services:
       - rabbitmq
     volumes:
       - ./src/common:/code/common:ro
+      - ./src/models/quality:/code/models:ro
       - ./${USER_DATA}:${USER_DATA}
 
   highlights:
