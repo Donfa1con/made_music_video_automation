@@ -37,7 +37,7 @@ def get_folder_by_ext(path):
 
 @BOT.message_handler(commands=['start'])
 def check_user(message):
-    BOT.send_message(message.from_user.id, 'Hello')
+    BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video')
 
 
 @BOT.message_handler(commands=['create'])
@@ -85,6 +85,9 @@ def callback_inline_photo(message):
         with open(os.path.join(last_created_folder, folder, os.path.basename(file_info.file_path)), 'wb') as file:
             file.write(downloaded_file)
 
+    keyboard = telebot.types.ReplyKeyboardMarkup()
+    keyboard.row('/create')
+    BOT.send_message(message.chat.id, "Let's create", reply_markup=keyboard)
 
 if __name__ == '__main__':
     while True:
