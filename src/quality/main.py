@@ -39,7 +39,7 @@ def callback(message):
                 break
             score = QUALITY_MODEL.predict(frame)
             scores.append(score)
-            message['quality']['results'][video_path].append(frame_cnt)
+            message['quality']['results'][video_path].append(score)
 
             frame_cnt += 1
         cap.release()
