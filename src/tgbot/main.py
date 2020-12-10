@@ -37,7 +37,7 @@ def get_folder_by_ext(path):
 
 @BOT.message_handler(commands=['start'])
 def check_user(message):
-    BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video (like file)')
+    BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video')
 
 
 @BOT.message_handler(commands=['create'])
@@ -68,13 +68,16 @@ def callback_inline_photo(message):
     if message.content_type == 'photo':
         file_id = message.photo[-1].file_id
         folder = 'images'
+    elif message.content_type == 'video':
+        file_id = message.video.file_id
+        folder = 'videos'
     elif message.content_type == 'document':
         file_id = message.document.file_id
     else:
         return
 
     file_info = BOT.get_file(file_id)
-    print('file.file_path =', file_info.file_path, flush=True)
+    print('file.file_path =', file_info.file_path)
 
     if folder is None:
         folder = get_folder_by_ext(file_info.file_path)
@@ -96,6 +99,12 @@ if __name__ == '__main__':
             WORKER = RabbitMQWorker(None, **RABBIT_CONFIG['tgbot'])
             break
         except Exception as e:
-            print(e, flush=True)
+            print(e)
             time.sleep(10)
-    BOT.polling(none_stop=True)
+
+    while True:
+        try:
+            BOT.polling(none_stop=True)
+        except Exception as e:
+            print(e)
+            time.sleep(10)

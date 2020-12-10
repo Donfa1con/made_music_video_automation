@@ -1,6 +1,4 @@
 import json
-import sys
-import traceback
 
 import pika
 
@@ -51,5 +49,5 @@ class RabbitMQWorker:
             if self.to_queue:
                 self.send(message)
         except Exception as e:
-            print(e, flush=True)
+            print(e)
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)

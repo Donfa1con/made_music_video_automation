@@ -1,4 +1,7 @@
 pika==1.1.0
 requests==2.25.0
-opencv-python==4.4.0.46
-ffmpeg-python==0.2.0
+imageio==2.4.1
+llvmlite==0.31.0
+librosa==0.6.3
+visbeat==0.0.9
+opencv-python==4.2.0.32

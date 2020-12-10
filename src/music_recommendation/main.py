@@ -13,7 +13,7 @@ def callback(message):
     """Queue callback
     :param message: json data
     """
-    print(message, flush=True)
+    print(message)
     start_time = time.time()
     send_message('Stage 3/4', message['tgbot']['user_id'])
 
@@ -44,5 +44,5 @@ if __name__ == '__main__':
             worker = RabbitMQWorker(callback, **RABBIT_CONFIG['music_recommendation'])
             worker.listen_queue()
         except Exception as e:
-            print(e, flush=True)
+            print(e)
         time.sleep(10)

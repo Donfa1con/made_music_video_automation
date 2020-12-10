@@ -15,7 +15,7 @@ def callback(message):
     """Queue callback
     :param message: json data
     """
-    print(message, flush=True)
+    print(message)
     start_time = time.time()
     send_message('Stage 1/4', message['tgbot']['user_id'])
 
@@ -37,10 +37,10 @@ def callback(message):
             success, frame = cap.read()
             if not success:
                 break
-            score = QUALITY_MODEL.predict(frame)
-            scores.append(score)
-            message['quality']['results'][video_path].append(score)
-
+            if frame_cnt % 3 == 1:
+                score = QUALITY_MODEL.predict(frame)
+                scores.extend([score, score, score])
+                message['quality']['results'][video_path].extend([score, score, score])
             frame_cnt += 1
         cap.release()
 
@@ -65,5 +65,5 @@ if __name__ == '__main__':
             worker = RabbitMQWorker(callback, **RABBIT_CONFIG['quality'])
             worker.listen_queue()
         except Exception as e:
-            print(e, flush=True)
+            print(e)
         time.sleep(10)

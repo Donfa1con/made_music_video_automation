@@ -3,14 +3,15 @@ import requests
 
 
 def send_video(video_path, user_id):
-    bot_url = 'https://api.telegram.org/bot{}/sendVideo?chat_id={}&caption={}'.format(os.environ.get("BOT_TOKEN"),
-                                                                                      user_id, "Video created")
+    bot_url = 'https://api.telegram.org/bot{0}/sendVideo?chat_id={1}&caption={2}'.format(os.environ.get("BOT_TOKEN"),
+                                                                                         user_id, "Video created")
     with open(video_path, 'rb') as video:
         r = requests.post(bot_url, files={'video': video})
-        print(r.text, flush=True)
+        print(r.text)
 
 
 def send_message(text, user_id):
-    bot_url = f'https://api.telegram.org/bot{os.environ.get("BOT_TOKEN")}/sendMessage?chat_id={user_id}&text={text}'
+    bot_url = 'https://api.telegram.org/bot{0}/sendMessage?chat_id={1}&text={2}'.format(os.environ.get("BOT_TOKEN"),
+                                                                                        user_id, text)
     r = requests.post(bot_url)
-    print(r.text, flush=True)
+    print(r.text)

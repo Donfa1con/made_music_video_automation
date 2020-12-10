@@ -14,7 +14,7 @@ def callback(message):
     """Queue callback
     :param message: json data
     """
-    print(message, flush=True)
+    print(message)
     start_time = time.time()
     send_message("Stage 2/4", message['tgbot']['user_id'])
     # Заглушка

@@ -11,4 +11,6 @@ RUN pip3 install -r requirements.txt
 
 COPY . /code
 
+ENV PYTHONUNBUFFERED=1
+
 CMD bash -c "source /opt/intel/openvino/bin/setupvars.sh && python3 main.py"

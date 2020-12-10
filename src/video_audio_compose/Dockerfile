@@ -1,14 +1,16 @@
-FROM openvino/ubuntu18_runtime:2021.1
+FROM python:2.7
 USER root
-RUN rm -r /opt/intel/openvino/opencv/ && \
-    rm /opt/intel/openvino/python/python3/cv2.abi3.so && \
-    apt update && apt-get install libgl1-mesa-dev ffmpeg -y
+
+RUN apt update && apt-get install libsndfile1 python-opencv -y
 
 WORKDIR /code
+COPY cat.png /usr/local/lib/python2.7/site-packages/visbeat/_assets/images/
 
 COPY requirements.txt /code/
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 COPY . /code
 
-CMD bash -c "source /opt/intel/openvino/bin/setupvars.sh && python3 main.py"
+ENV PYTHONUNBUFFERED=1
+
+CMD python main.py

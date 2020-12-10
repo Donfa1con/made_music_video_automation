@@ -75,3 +75,4 @@ services:
       - ./src/common:/code/common:ro
       - ./${USER_DATA}:${USER_DATA}
       - ./genres:${MUSIC_DATA}
+      - ./${VISBEAT_DATA}:${VISBEAT_DATA}
