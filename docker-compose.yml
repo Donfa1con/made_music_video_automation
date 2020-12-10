@@ -58,7 +58,9 @@ services:
       - rabbitmq
     volumes:
       - ./src/common:/code/common:ro
+      - ./src/models/music:/code/models:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./genres:${MUSIC_DATA}
 
   video_audio_compose:
     restart: on-failure
@@ -72,3 +74,4 @@ services:
     volumes:
       - ./src/common:/code/common:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./genres:${MUSIC_DATA}
