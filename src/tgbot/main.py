@@ -40,6 +40,16 @@ def check_user(message):
     BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video')
 
 
+@BOT.message_handler(commands=['change_logo'])
+def change_logo(message):
+    logo = os.environ.get('LOGO', 'default')
+    if logo == 'default':
+        os.environ['LOGO'] = 'cat'
+    else:
+        os.environ['LOGO'] = 'default'
+    BOT.send_message(message.from_user.id, f'Logo changed to {os.environ["LOGO"]}')
+
+
 @BOT.message_handler(commands=['create'])
 def check_user(message):
     user_id = str(message.from_user.id)
@@ -47,7 +57,8 @@ def check_user(message):
     if last_created_folder and glob.glob(f'{last_created_folder}/*/*'):
         WORKER.send({'tgbot': {
             'data_path': last_created_folder,
-            'user_id': user_id
+            'user_id': user_id,
+            'logo': os.environ.get('LOGO', 'default')
         }})
         init_new_folder(user_id)
     else:
@@ -94,6 +105,7 @@ def callback_inline_photo(message):
 
 
 if __name__ == '__main__':
+    os.environ['LOGO'] = 'default'
     while True:
         try:
             WORKER = RabbitMQWorker(None, **RABBIT_CONFIG['tgbot'])

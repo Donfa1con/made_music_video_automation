@@ -61,10 +61,10 @@ def callback(message):
     writer.release()
     bad_writer.release()
 
-    send_video(bad_frames_path, message['tgbot']['user_id'])
+    send_video(bad_frames_path, message['tgbot']['user_id'], 'Removed video')
     message.update({'highlights': {'time': time.time() - start_time,
                                    'highlight_path': highlight_path}})
-    send_message(f'Stage 2/4, time: {message["highlights"]["time"]}', message['tgbot']['user_id'])
+    send_message(f'Stage 2/4, time: {message["highlights"]["time"]:.2f}', message['tgbot']['user_id'])
     return message
 
 

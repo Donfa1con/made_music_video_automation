@@ -32,7 +32,7 @@ def callback(message):
     audio_path = get_track_path(label)
     message.update({'music_recommendation': {'audio_path': audio_path,
                                              'time': time.time() - start_time}})
-    send_message(f'Stage 3/4, label: {label}, time: {message["music_recommendation"]["time"]}',
+    send_message(f'Stage 3/4, label: {label}, time: {message["music_recommendation"]["time"]:.2f}',
                  message['tgbot']['user_id'])
     return message
 

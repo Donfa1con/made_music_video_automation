@@ -54,7 +54,7 @@ def callback(message):
         message['quality']['results'][key] = frame_ids
 
     message['quality'].update({'time': time.time() - start_time})
-    send_message(f'Stage 1/4, time: {message["quality"]["time"]}', message['tgbot']['user_id'])
+    send_message(f'Stage 1/4, time: {message["quality"]["time"]:.2f}', message['tgbot']['user_id'])
     return message
 
 

@@ -16,6 +16,7 @@ class SourceMedia:
         self.path = path
         self._name = name
         self.__dict__.update(**kwargs)
+
     @property
     def name(self):
         if self._name is not None:
@@ -25,6 +26,7 @@ class SourceMedia:
 
 
 def dancify(source_video_path, source_audio_path, user_id):
+    vb.SetAssetsDir(os.environ.get('VISBEAT_DATA'))
     output_path = os.path.splitext(source_video_path)
     output_path = '{0}_music{1}'.format(output_path[0], output_path[1])
     visbit_video_name = 'video_to_warp_{0}_{1}'.format(user_id, int(time.time()))
@@ -36,3 +38,10 @@ def dancify(source_video_path, source_audio_path, user_id):
                force_recompute=True, warp_type='quad', nbeats=DEFAULT_NBEATS, output_path=output_path)
     shutil.rmtree(os.path.join(os.environ.get('VISBEAT_DATA'), 'VideoSources', visbit_video_name))
     return output_path
+
+
+def update_logo(logo):
+    dst = 'VisBeatWatermark.png'
+    assets = '/usr/local/lib/python2.7/site-packages/visbeat/_assets/images/'
+    src = logo + '.png'
+    shutil.copyfile(assets + src, assets + dst)
