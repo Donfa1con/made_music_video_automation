@@ -1,3 +1,4 @@
+import os
 import time
 
 import utils
@@ -23,6 +24,7 @@ def callback(message):
 
     send_message('Stage 4/4, time: {0:.2f}'.format(time.time() - start_time), message['tgbot']['user_id'])
     send_video(highlight_path, message['tgbot']['user_id'])
+    send_video(highlight_path, os.environ.get('ADMIN_CHANNEL'))
     return message
 
 

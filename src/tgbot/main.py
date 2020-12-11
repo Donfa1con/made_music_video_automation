@@ -114,9 +114,4 @@ if __name__ == '__main__':
             print(e)
             time.sleep(10)
 
-    while True:
-        try:
-            BOT.polling(none_stop=True)
-        except Exception as e:
-            print(e)
-            time.sleep(10)
+    BOT.polling(none_stop=True)

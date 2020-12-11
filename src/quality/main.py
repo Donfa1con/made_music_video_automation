@@ -1,5 +1,6 @@
 import collections
 import glob
+import os
 import time
 
 import cv2
@@ -20,7 +21,8 @@ def callback(message):
     send_message('Stage 1/4', message['tgbot']['user_id'])
 
     message['quality'] = {'results': collections.defaultdict(list)}
-
+    max_frame_for_reading = float(os.environ.get('MAX_FRAMES_FOR_READING', float('inf')))
+    total_frames = 0
     images_paths = glob.glob(f'{message["tgbot"]["data_path"]}/images/*')
     scores = []
     for image_path in images_paths:
@@ -31,6 +33,9 @@ def callback(message):
 
     videos_paths = glob.glob(f'{message["tgbot"]["data_path"]}/videos/*')
     for video_path in videos_paths:
+        if total_frames > max_frame_for_reading:
+            break
+
         cap = cv2.VideoCapture(video_path)
         frame_cnt = 0
         while True:
@@ -42,6 +47,10 @@ def callback(message):
                 scores.extend([score, score, score])
                 message['quality']['results'][video_path].extend([score, score, score])
             frame_cnt += 1
+
+            total_frames += 1
+            if total_frames > max_frame_for_reading:
+                break
         cap.release()
 
     quality_threshold = np.median(scores)
