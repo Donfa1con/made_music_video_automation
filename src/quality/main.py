@@ -53,7 +53,7 @@ def callback(message):
                 break
         cap.release()
 
-    quality_threshold = np.median(scores)
+    quality_threshold = os.environ.get('QUALITY_THRESHOLD', np.median(scores))
 
     for key, val in message['quality']['results'].items():
         frame_ids = []
