@@ -37,7 +37,7 @@ def get_folder_by_ext(path):
 
 @BOT.message_handler(commands=['start'])
 def check_user(message):
-    BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video')
+    BOT.send_message(message.from_user.id, 'Hello!\nUpload image, video (max video size 20Mb)')
 
 
 @BOT.message_handler(commands=['change_logo'])

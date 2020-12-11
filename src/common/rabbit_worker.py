@@ -1,8 +1,10 @@
 import json
+import os
 
 import pika
 
 from .config import RABBIT_CONFIG
+from .telegram import send_message
 
 
 class RabbitMQWorker:
@@ -50,4 +52,5 @@ class RabbitMQWorker:
                 self.send(message)
         except Exception as e:
             print(e)
+            send_message(str(e), os.environ.get('ADMIN_CHANNEL'))
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)
