@@ -80,15 +80,19 @@ def callback(message):
             elif file_path in videos_paths:
                 cap = cv2.VideoCapture(file_path)
                 frame_cnt = 0
+                frame_cnt_good_frames = 0
                 scored_frames = set(total_video_params[file_path])
+                good_frames = set(message['quality']['results'][file_path])
                 while scored_frames:
                     success, frame = cap.read()
                     if not success:
                         break
-                    if frame_cnt in scored_frames:
-                        resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
-                        scored_frames.remove(frame_cnt)
-                        writer.write(resized_frame)
+                    if frame_cnt in good_frames:
+                        if frame_cnt_good_frames in scored_frames:
+                            resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
+                            scored_frames.remove(frame_cnt_good_frames)
+                            writer.write(resized_frame)
+                        frame_cnt_good_frames += 1
                     frame_cnt += 1
                 cap.release()
     writer.release()

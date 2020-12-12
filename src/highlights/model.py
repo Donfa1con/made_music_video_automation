@@ -31,22 +31,21 @@ class Video2GifModel:
         batch -= self.snipplet_mean
         batch = batch[:, :, 8:120, 29:141]
         batch = np.stack((batch, batch[..., ::-1]), axis=0)
-        score = self.video2gif.predict(batch.transpose((0, 2, 3, 4, 1)))
+        score = np.mean(self.video2gif.predict(batch.transpose((0, 2, 3, 4, 1))))
         if video_name:
             self.video_scores[video_name].append(score)
         return score
 
     def _eval_scores(self):
         for key, scores in self.video_scores.items():
-            score = np.mean(scores, axis=1).ravel()
             new_scores = []
-            for i in range(len(score)):
-                if i == 0 or i == len(score) - 1:
-                    for _ in range(8):
-                        new_scores.append(score[i])
+            for i in range(len(scores)):
+                if i == 0 or i == len(scores) - 1:
+                    for _ in range(self.deep // 2):
+                        new_scores.append(scores[i])
                 else:
-                    for _ in range(8):
-                        new_scores.append(score[i:i + 2].mean())
+                    for _ in range(self.deep // 2):
+                        new_scores.append(np.mean(scores[i:i + 2]))
             self.video_scores[key] = np.array(new_scores)
 
     def get_best_scores(self, length=30 * 30, image_time=30):  # sec * fps, fps
@@ -67,5 +66,5 @@ class Video2GifModel:
             else:
                 total_time += 1
         for key, val in total_video_params.items():
-            total_video_params[key] = sorted(val)
+            total_video_params[key] = val
         return total_video_params
