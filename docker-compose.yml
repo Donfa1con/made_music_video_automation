@@ -18,6 +18,7 @@ services:
     volumes:
       - ./src/common:/code/common:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./demo:/demo
 
   quality:
     restart: on-failure
@@ -32,6 +33,7 @@ services:
       - ./src/common:/code/common:ro
       - ./src/models/quality:/code/models:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./demo:/demo
 
   highlights:
     restart: on-failure
@@ -46,6 +48,7 @@ services:
       - ./src/common:/code/common:ro
       - ./src/models/highlights:/code/models:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./demo:/demo
 
   music_recommendation:
     restart: on-failure
@@ -60,6 +63,7 @@ services:
       - ./src/common:/code/common:ro
       - ./src/models/music:/code/models:ro
       - ./${USER_DATA}:${USER_DATA}
+      - ./demo:/demo
       - ./genres:${MUSIC_DATA}
 
   video_audio_compose:
@@ -75,4 +79,5 @@ services:
       - ./src/common:/code/common:ro
       - ./${USER_DATA}:${USER_DATA}
       - ./genres:${MUSIC_DATA}
+      - ./demo:/demo
       - ./${VISBEAT_DATA}:${VISBEAT_DATA}

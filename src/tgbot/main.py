@@ -60,6 +60,7 @@ def build_main_menu(user_id):
     keyboard = telebot.types.ReplyKeyboardMarkup()
     keyboard.row('/create')
     keyboard.row('/settings')
+    keyboard.row('/demo')
     BOT.send_message(user_id, "Let's create", reply_markup=keyboard)
     return keyboard
 
@@ -183,6 +184,21 @@ def callback_inline_data(message):
         with open(os.path.join(last_created_folder, folder, os.path.basename(file_info.file_path)), 'wb') as file:
             file.write(downloaded_file)
     BOT.send_message(user_id, 'Done!')
+
+
+@BOT.message_handler(commands=['demo'])
+def create_video(message):
+    user_id = str(message.from_user.id)
+    settings = load_settings(user_id)
+    WORKER.send({'tgbot': {
+        'data_path': '/demo',
+        'user_id': user_id,
+        'logo': os.environ.get('LOGO', 'default'),
+        'quality': settings['stages']['quality'] == '✅',
+        'highlights': settings['stages']['highlights'] == '✅',
+        'music_recommendation': settings['stages']['music_recommendation'] == '✅',
+        'visbeat': settings['stages']['visbeat'] == '✅'
+    }})
 
 
 if __name__ == '__main__':

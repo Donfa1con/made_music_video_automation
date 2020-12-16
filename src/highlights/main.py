@@ -118,8 +118,6 @@ def callback(message):
                         frame_cnt += 1
                     cap.release()
             else:
-                print('AAAA')
-                print(file_path in images_paths)
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
                     image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
