@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 RABBIT_CONFIG = {
     'host': 'rabbitmq',
     'tgbot': {
@@ -37,3 +39,20 @@ VIDEO_FORMATS = {'.webm', '.mkv', '.flv', '.vob', '.ogv', '.ogg', '.drc', '.gif'
                  '.roq', '.nsv', '.f4v', '.f4p', '.f4a', '.f4b'}
 
 IMAGE_FORMATS = {'.jpeg', 'jpg', '.png', '.webp'}
+
+# https://en.wikipedia.org/wiki/Audio_file_format
+AUDIO_FORMATS = {'.aa', '.aac', '.aax', '.act', '.aiff', '.alac', '.amr', '.ape', '.au', '.awb', '.dct', '.dss', '.dvf',
+                 '.flac', '.gsm', '.iklax', '.ivs', '.m4a', '.m4b', '.m4p', '.mmf', '.mp3', '.mpc', '.msv', '.nmf',
+                 '.ogg', '.oga', '.mogg', '.opus', '.org', '.ra', '.rm', '.raw', '.rf64', '.sln', '.tta', '.voc',
+                 '.vox', '.wav', '.wma', '.wv', '.webm', '.8svx', '.cda'}
+
+USER_CONFIG_NAME = 'settings.json'
+
+DEFAULT_SETTINGS = {
+    'stages': {
+        'quality': "✅",
+        'highlights': "✅",
+        'music_recommendation': "✅",
+        'visbeat': "✅",
+    },
+}

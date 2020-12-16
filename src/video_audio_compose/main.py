@@ -15,14 +15,16 @@ def callback(message):
     start_time = time.time()
     send_message('Stage 4/4', message['tgbot']['user_id'])
 
+    if message['tgbot']['visbeat']:
+        utils.update_logo(message['tgbot']['logo'])
+        highlight_path = utils.dancify(message['highlights']['highlight_path'],
+                                       message['music_recommendation']['audio_path'],
+                                       message['tgbot']['user_id'])
+    else:
+        highlight_path = utils.add_audio(message['highlights']['highlight_path'],
+                                         message['music_recommendation']['audio_path'])
     message.update({'video_audio_compose': {'time': time.time() - start_time}})
-
-    utils.update_logo(message['tgbot']['logo'])
-    highlight_path = utils.dancify(message['highlights']['highlight_path'],
-                                   message['music_recommendation']['audio_path'],
-                                   message['tgbot']['user_id'])
-
-    send_message('Stage 4/4, time: {0:.2f}'.format(time.time() - start_time), message['tgbot']['user_id'])
+    send_message('Stage 4/4, time: {0:.2f}'.format(message['video_audio_compose']['time']), message['tgbot']['user_id'])
     send_video(highlight_path, message['tgbot']['user_id'])
     send_video(highlight_path, os.environ.get('ADMIN_CHANNEL'))
     return message

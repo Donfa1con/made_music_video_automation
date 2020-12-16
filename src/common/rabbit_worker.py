@@ -45,12 +45,13 @@ class RabbitMQWorker:
         :param _: rabbit properties
         :param body: task body
         """
+        message = json.loads(body)
         try:
-            message = json.loads(body)
             message = self.custom_callback(message)
             if self.to_queue:
                 self.send(message)
         except Exception as e:
             print(e)
             send_message(str(e), os.environ.get('ADMIN_CHANNEL'))
+            send_message('Something went wrong', message['tgbot']['user_id'])
         channel.basic_ack(delivery_tag=method_frame.delivery_tag)

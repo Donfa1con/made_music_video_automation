@@ -1,7 +1,7 @@
 FROM python:2.7
 USER root
 
-RUN apt update && apt-get install libsndfile1 python-opencv -y
+RUN apt update && apt-get install libsndfile1 python-opencv libgl1-mesa-dev ffmpeg -y
 
 WORKDIR /code
 

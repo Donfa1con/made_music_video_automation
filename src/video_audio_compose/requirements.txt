@@ -5,3 +5,4 @@ llvmlite==0.31.0
 librosa==0.6.3
 visbeat==0.0.9
 opencv-python==4.2.0.32
+ffmpeg-python==0.2.0

@@ -3,10 +3,11 @@ import shutil
 import time
 
 import visbeat as vb
+import ffmpeg
 
-# length music-video beats, duration of outout, 16 beats ~ 8 sec
-DEFAULT_NBEATS = 40
-DEFAULT_MAX_HEIGHT = 720
+# length music-video beats, duration of output, 16 beats ~ 8 sec
+DEFAULT_NBEATS = int(os.environ.get('MAX_RESULT_VIDEO_LENGTH'), 30)
+DEFAULT_MAX_HEIGHT = int(os.environ.get('VISBEAT_DEFAULT_MAX_HEIGHT', 480))
 SYNCH_VIDEO_BEAT = 0
 SYNCH_AUDIO_BEAT = 0
 
@@ -25,7 +26,7 @@ class SourceMedia:
             return os.path.splitext(os.path.basename(self.path))[0]
 
 
-def dancify(source_video_path, source_audio_path, user_id):
+def dancify(source_video_path, source_audio_path, user_id, length=DEFAULT_NBEATS):
     vb.SetAssetsDir(os.environ.get('VISBEAT_DATA'))
     output_path = os.path.splitext(source_video_path)
     output_path = '{0}_music{1}'.format(output_path[0], output_path[1])
@@ -35,7 +36,7 @@ def dancify(source_video_path, source_audio_path, user_id):
     video = vb.PullVideo(name=video_to_warp.name, source_location=video_to_warp.path, max_height=DEFAULT_MAX_HEIGHT)
     audio = vb.Audio(source_audio_path)
     vb.Dancify(source_video=video, target=audio, synch_video_beat=SYNCH_VIDEO_BEAT, synch_audio_beat=SYNCH_AUDIO_BEAT,
-               force_recompute=True, warp_type='quad', nbeats=DEFAULT_NBEATS, output_path=output_path)
+               force_recompute=True, warp_type='quad', nbeats=length * 2, output_path=output_path)
     shutil.rmtree(os.path.join(os.environ.get('VISBEAT_DATA'), 'VideoSources', visbit_video_name))
     return output_path
 
@@ -45,3 +46,12 @@ def update_logo(logo):
     assets = '/usr/local/lib/python2.7/site-packages/visbeat/_assets/images/'
     src = logo + '.png'
     shutil.copyfile(assets + src, assets + dst)
+
+
+def add_audio(video_path, audio_path):
+    video_part = ffmpeg.input(video_path)
+    audio_part = ffmpeg.input(audio_path)
+    video_path = os.path.splitext(video_path)
+    video_path = '{0}_music{1}'.format(video_path[0], video_path[1])
+    ffmpeg.output(audio_part.audio, video_part.video, video_path, shortest=None, vcodec='copy').run()
+    return video_path
