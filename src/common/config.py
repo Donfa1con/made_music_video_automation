@@ -24,7 +24,7 @@ RABBIT_CONFIG = {
 }
 
 RESULT_VIDEO_PARAMS = {
-    'size': (1280, 720),  # w, h
+    'size': (640, 360),  # w, h
     'fps': 30.0,
     'format': {
         'fourcc': 'mp4v',
