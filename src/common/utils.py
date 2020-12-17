@@ -6,12 +6,12 @@ import numpy as np
 from .config import RESULT_VIDEO_PARAMS
 
 
-def create_writer(data_path, name):
+def create_writer(data_path, name, format=0):
     video_path = os.path.join(data_path, f'{name}.{RESULT_VIDEO_PARAMS["format"]["ext"]}')
     writer = cv2.VideoWriter(video_path,
                              cv2.VideoWriter_fourcc(*RESULT_VIDEO_PARAMS['format']['fourcc']),
                              RESULT_VIDEO_PARAMS['fps'],
-                             RESULT_VIDEO_PARAMS['size'])
+                             RESULT_VIDEO_PARAMS['size'] if not format else RESULT_VIDEO_PARAMS['size'][::-1])
     return writer, video_path
 
 

@@ -2,7 +2,7 @@ import os
 import time
 
 import utils
-from common.config import RABBIT_CONFIG
+from common.config import RABBIT_CONFIG, RESULT_VIDEO_PARAMS
 from common.rabbit_worker import RabbitMQWorker
 from common.telegram import send_message, send_video
 
@@ -19,7 +19,9 @@ def callback(message):
         utils.update_logo(message['tgbot']['logo'])
         highlight_path = utils.dancify(message['highlights']['highlight_path'],
                                        message['music_recommendation']['audio_path'],
-                                       message['tgbot']['user_id'])
+                                       message['tgbot']['user_id'],
+                                       RESULT_VIDEO_PARAMS['size'][0] if message['tgbot']['position']
+                                       else RESULT_VIDEO_PARAMS['size'][1])
     else:
         highlight_path = utils.add_audio(message['highlights']['highlight_path'],
                                          message['music_recommendation']['audio_path'])

@@ -20,14 +20,17 @@ def callback(message):
     print(message)
     start_time = time.time()
     send_message("Stage 2/4", message['tgbot']['user_id'])
-    bad_writer, bad_frames_path = create_writer(message["tgbot"]["data_path"], 'bad_frames')
-    writer, highlight_path = create_writer(message["tgbot"]["data_path"], 'highlights')
+    bad_writer, bad_frames_path = create_writer(message["tgbot"]["data_path"],
+                                                'bad_frames', message['tgbot']['position'])
+    writer, highlight_path = create_writer(message["tgbot"]["data_path"],
+                                           'highlights', message['tgbot']['position'])
     images_paths = glob.glob(f'{message["tgbot"]["data_path"]}/images/*')
     videos_paths = glob.glob(f'{message["tgbot"]["data_path"]}/videos/*')
     all_paths = images_paths + videos_paths
     random.shuffle(all_paths)
     images_paths = set(images_paths)
     videos_paths = set(videos_paths)
+    video_size = RESULT_VIDEO_PARAMS['size'] if not message['tgbot']['position'] else RESULT_VIDEO_PARAMS['size'][::-1]
     if message['tgbot']['highlights']:
         for file_path in all_paths:
             if (file_path in videos_paths and message['quality']['results'].get(file_path, [])) or \
@@ -54,14 +57,14 @@ def callback(message):
                                 q_size = VIDE2GIF.deep // 2
                                 _ = VIDE2GIF.predict_clip(queue, file_path)
                         else:
-                            resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
+                            resized_frame = resize_image_with_ratio(frame, *video_size)
                             bad_writer.write(resized_frame)
                         frame_cnt += 1
                     cap.release()
             else:
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
-                    image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                    image = resize_image_with_ratio(image, *video_size)
                     for _ in range(int(RESULT_VIDEO_PARAMS['fps'] // 3)):
                         bad_writer.write(image)
 
@@ -71,7 +74,7 @@ def callback(message):
             if file_path in total_video_params:
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
-                    image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                    image = resize_image_with_ratio(image, *video_size)
                     for _ in range(int(RESULT_VIDEO_PARAMS['fps'])):
                         writer.write(image)
 
@@ -87,7 +90,7 @@ def callback(message):
                             break
                         if frame_cnt not in bad_frames:
                             if frame_cnt_good_frames in scored_frames:
-                                resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
+                                resized_frame = resize_image_with_ratio(frame, *video_size)
                                 scored_frames.remove(frame_cnt_good_frames)
                                 writer.write(resized_frame)
                             frame_cnt_good_frames += 1
@@ -99,7 +102,7 @@ def callback(message):
                     (file_path in images_paths and not message['quality']['results'].get(file_path, [])):
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
-                    image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                    image = resize_image_with_ratio(image, *video_size)
                     for _ in range(int(RESULT_VIDEO_PARAMS['fps'])):
                         writer.write(image)
                 elif file_path in videos_paths:
@@ -110,7 +113,7 @@ def callback(message):
                         success, frame = cap.read()
                         if not success:
                             break
-                        resized_frame = resize_image_with_ratio(frame, *RESULT_VIDEO_PARAMS['size'])
+                        resized_frame = resize_image_with_ratio(frame, *video_size)
                         if frame_cnt not in bad_frames:
                             writer.write(resized_frame)
                         else:
@@ -120,7 +123,7 @@ def callback(message):
             else:
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
-                    image = resize_image_with_ratio(image, *RESULT_VIDEO_PARAMS['size'])
+                    image = resize_image_with_ratio(image, *video_size)
                     for _ in range(int(RESULT_VIDEO_PARAMS['fps'] // 3)):
                         bad_writer.write(image)
     writer.release()

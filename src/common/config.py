@@ -55,4 +55,7 @@ DEFAULT_SETTINGS = {
         'music_recommendation': "✅",
         'visbeat': "✅",
     },
+    'video': {
+        'position': 'Horizontal'
+    }
 }

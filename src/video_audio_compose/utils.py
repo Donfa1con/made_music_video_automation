@@ -7,7 +7,6 @@ import ffmpeg
 
 # length music-video beats, duration of output, 16 beats ~ 8 sec
 DEFAULT_NBEATS = int(os.environ.get('MAX_RESULT_VIDEO_LENGTH'), 30)
-DEFAULT_MAX_HEIGHT = int(os.environ.get('VISBEAT_DEFAULT_MAX_HEIGHT', 480))
 SYNCH_VIDEO_BEAT = 0
 SYNCH_AUDIO_BEAT = 0
 
@@ -26,14 +25,14 @@ class SourceMedia:
             return os.path.splitext(os.path.basename(self.path))[0]
 
 
-def dancify(source_video_path, source_audio_path, user_id, length=DEFAULT_NBEATS):
+def dancify(source_video_path, source_audio_path, user_id, height, length=DEFAULT_NBEATS):
     vb.SetAssetsDir(os.environ.get('VISBEAT_DATA'))
     output_path = os.path.splitext(source_video_path)
     output_path = '{0}_music{1}'.format(output_path[0], output_path[1])
     visbit_video_name = 'video_to_warp_{0}_{1}'.format(user_id, int(time.time()))
     video_to_warp = SourceMedia(path=source_video_path, name=visbit_video_name)
     vb.LoadVideo(name=video_to_warp.name)
-    video = vb.PullVideo(name=video_to_warp.name, source_location=video_to_warp.path, max_height=DEFAULT_MAX_HEIGHT)
+    video = vb.PullVideo(name=video_to_warp.name, source_location=video_to_warp.path, max_height=height)
     audio = vb.Audio(source_audio_path)
     vb.Dancify(source_video=video, target=audio, synch_video_beat=SYNCH_VIDEO_BEAT, synch_audio_beat=SYNCH_AUDIO_BEAT,
                force_recompute=True, warp_type='quad', nbeats=length * 2, output_path=output_path)

@@ -76,12 +76,15 @@ def build_settings_menu(user_id, text="Enable/Disable stages"):
                                             callback_data='music_recommendation'),
                  types.InlineKeyboardButton(f'Visbeat - {settings["stages"]["visbeat"]}',
                                             callback_data='visbeat'))
+    keyboard.row(types.InlineKeyboardButton(f'{settings["video"]["position"]}', callback_data='menu'))
     keyboard.row(types.InlineKeyboardButton('Main menu', callback_data='menu'))
     BOT.send_message(user_id, text, reply_markup=keyboard)
 
 
-@BOT.message_handler(func=lambda message: message and message.text and ('✅' in message.text or 'menu' in message.text
-                                                                        or '❌' in message.text))
+@BOT.message_handler(func=lambda message: message and message.text and ('✅' in message.text or '❌' in message.text
+                                                                        or 'menu' in message.text
+                                                                        or 'Horizontal' in message.text
+                                                                        or 'Vertical' in message.text))
 def update_settings(message):
     text = message.text
     user_id = message.from_user.id
@@ -100,6 +103,10 @@ def update_settings(message):
         build_settings_menu(user_id, text='Changed')
     elif 'Visbeat' in text:
         settings["stages"]["visbeat"] = '✅' if settings["stages"]["visbeat"] == '❌' else '❌'
+        save_settings(user_id, settings)
+        build_settings_menu(user_id, text='Changed')
+    elif 'Vertical' in text or 'Horizontal' in text:
+        settings["video"]["position"] = 'Vertical' if settings["video"]["position"] == 'Horizontal' else 'Horizontal'
         save_settings(user_id, settings)
         build_settings_menu(user_id, text='Changed')
     elif 'Main' in text:
@@ -146,7 +153,8 @@ def create_video(message):
             'quality': settings['stages']['quality'] == '✅',
             'highlights': settings['stages']['highlights'] == '✅',
             'music_recommendation': settings['stages']['music_recommendation'] == '✅',
-            'visbeat': settings['stages']['visbeat'] == '✅'
+            'visbeat': settings['stages']['visbeat'] == '✅',
+            'position': settings['video']['position'] == 'Vertical'
         }})
         init_new_folder(user_id)
     else:
@@ -197,7 +205,8 @@ def create_video(message):
         'quality': settings['stages']['quality'] == '✅',
         'highlights': settings['stages']['highlights'] == '✅',
         'music_recommendation': settings['stages']['music_recommendation'] == '✅',
-        'visbeat': settings['stages']['visbeat'] == '✅'
+        'visbeat': settings['stages']['visbeat'] == '✅',
+        'position': settings['video']['position'] == 'Vertical'
     }})
 
 
