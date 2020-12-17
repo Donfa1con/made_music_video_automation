@@ -4,6 +4,7 @@ import glob
 import json
 import os
 import time
+import shutil
 
 import telebot
 from telebot import types
@@ -198,8 +199,10 @@ def callback_inline_data(message):
 def create_video(message):
     user_id = str(message.from_user.id)
     settings = load_settings(user_id)
+    last_created_folder = get_last_folder_by_id(user_id)
+    shutil.copy('/demo/videos/out.mp4', f'{last_created_folder}/videos/out.mp4')
     WORKER.send({'tgbot': {
-        'data_path': '/demo',
+        'data_path': last_created_folder,
         'user_id': user_id,
         'logo': os.environ.get('LOGO', 'default'),
         'quality': settings['stages']['quality'] == '✅',
@@ -208,6 +211,7 @@ def create_video(message):
         'visbeat': settings['stages']['visbeat'] == '✅',
         'position': settings['video']['position'] == 'Vertical'
     }})
+    init_new_folder(user_id)
 
 
 if __name__ == '__main__':

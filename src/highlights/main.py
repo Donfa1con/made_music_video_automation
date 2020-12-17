@@ -33,7 +33,7 @@ def callback(message):
     video_size = RESULT_VIDEO_PARAMS['size'] if not message['tgbot']['position'] else RESULT_VIDEO_PARAMS['size'][::-1]
     if message['tgbot']['highlights']:
         for file_path in all_paths:
-            if (file_path in videos_paths and message['quality']['results'].get(file_path, [])) or \
+            if file_path in videos_paths or \
                     (file_path in images_paths and not message['quality']['results'].get(file_path, [])):
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
@@ -98,7 +98,7 @@ def callback(message):
                     cap.release()
     else:
         for file_path in all_paths:
-            if (file_path in videos_paths and message['quality']['results'].get(file_path, [])) or \
+            if file_path in videos_paths or \
                     (file_path in images_paths and not message['quality']['results'].get(file_path, [])):
                 if file_path in images_paths:
                     image = cv2.imread(file_path)
