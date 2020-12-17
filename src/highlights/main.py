@@ -70,7 +70,7 @@ def callback(message):
 
         total_video_params = VIDE2GIF.get_best_scores(int(os.environ.get('MAX_RESULT_VIDEO_LENGTH')))
         print(total_video_params)
-        
+
         for file_path in all_paths:
             if file_path in total_video_params:
                 if file_path in images_paths:

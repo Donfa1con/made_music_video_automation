@@ -11,9 +11,12 @@ class Video2GifModel:
     def __init__(self, path_to_openvino_model, path_to_snipplet):
         self.video2gif = OpenVinoModelWrapper(path_to_openvino_model)
         self.snipplet_mean = np.load(path_to_snipplet)
+        self._reset_state()
+        self.deep = 16
+
+    def _reset_state(self):
         self.video_scores = collections.defaultdict(list)
         self.image_scores = {}
-        self.deep = 16
 
     def preprocess(self, image):  # bgr image
         image = resize_image_with_ratio(image[..., ::-1], 171, 128)
@@ -67,4 +70,5 @@ class Video2GifModel:
                 total_time += 1
         for key, val in total_video_params.items():
             total_video_params[key] = val
+        self._reset_state()
         return total_video_params
