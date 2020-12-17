@@ -4,7 +4,7 @@ import time
 
 import visbeat as vb
 import ffmpeg
-
+from common.telegram import send_message
 # length music-video beats, duration of output, 16 beats ~ 8 sec
 DEFAULT_NBEATS = int(os.environ.get('MAX_RESULT_VIDEO_LENGTH'), 30)
 SYNCH_VIDEO_BEAT = 0
@@ -34,8 +34,13 @@ def dancify(source_video_path, source_audio_path, user_id, height, length=DEFAUL
     vb.LoadVideo(name=video_to_warp.name)
     video = vb.PullVideo(name=video_to_warp.name, source_location=video_to_warp.path, max_height=height)
     audio = vb.Audio(source_audio_path)
-    vb.Dancify(source_video=video, target=audio, synch_video_beat=SYNCH_VIDEO_BEAT, synch_audio_beat=SYNCH_AUDIO_BEAT,
-               force_recompute=True, warp_type='quad', nbeats=length * 2, output_path=output_path)
+    try:
+        vb.Dancify(source_video=video, target=audio,
+                   synch_video_beat=SYNCH_VIDEO_BEAT, synch_audio_beat=SYNCH_AUDIO_BEAT,
+                   force_recompute=True, warp_type='quad', nbeats=length * 2, output_path=output_path)
+    except Exception as e:
+        send_message('Visbeat failed: ' + str(e), os.environ.get('ADMIN_CHANNEL'))
+        output_path = add_audio(source_video_path, source_audio_path)
     shutil.rmtree(os.path.join(os.environ.get('VISBEAT_DATA'), 'VideoSources', visbit_video_name))
     return output_path
 
