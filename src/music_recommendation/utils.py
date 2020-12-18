@@ -62,6 +62,7 @@ def get_track_path(label):
         for key, val in GENRES.items():
             if label in val:
                 return random.choice(glob.glob(f'{os.environ.get("MUSIC_DATA")}/{key}/*'))
+        return random.choice(glob.glob(f'{os.environ.get("MUSIC_DATA")}/pop/*'))
 
 
 def get_random_track():
