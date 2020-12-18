@@ -122,7 +122,14 @@ def check_user(message):
         os.makedirs(user_data_path)
         init_new_folder(user_id)
 
-    BOT.send_message(user_id, 'Hello!\nUpload image, video (max video size 20Mb)')
+    BOT.send_message(user_id, '🎬 Create a musical story! Just add your photos and videos (max video size 20Mb), '
+                              'click a /create and the bot will create a musical story.\n'
+                              '🎼 You can also send music you want and the bot will edit the video for it, otherwise '
+                              'the music will be selected automatically.\n'
+                              '⚙️ In the /settings you can select the stages of video editing you need and change '
+                              'video format.\n'
+                              '✨Click /demo to see demo!\n'
+                              '🔝 Like, Share!')
     build_main_menu(user_id)
 
 
