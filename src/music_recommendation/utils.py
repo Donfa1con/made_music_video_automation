@@ -42,7 +42,7 @@ GENRES = {
                   'playingcello', 'playingchess', 'playingclarinet', 'playingcymbals', 'playingharp', 'playingkeyboard',
                   'playingorgan', 'playingrecorder', 'playingviolin', 'ridingorwalkingwithhorse', 'strummingguitar'},
 
-    'blues': {'arrangingflowers', 'claypotterymaking', 'cookingegg', 'crawlingbaby', 'dining',
+    'blues': {'arrangingflowers', 'claypotterymaking', 'brushinghair', 'cookingegg', 'crawlingbaby', 'dining',
               'discgolfing', 'drivingcar', 'egghunting', 'flippingpancake', 'golfchipping', 'golfdriving',
               'groominghorse', 'hoverboarding', 'hugging', 'iceskating', 'laughing', 'makingacake', 'newsanchoring',
               'pettinganimal(notcat)', 'pettingcat', 'playingaccordion', 'playingcards', 'playingflute',
